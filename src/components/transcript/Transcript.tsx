@@ -3,7 +3,7 @@ import { TranscriptItem } from "@components/transcript/TranscriptItem";
 import { ScrollArea, ScrollBar } from "@components/ui/scroll-area";
 
 export const Transcript = () => {
-  return <div className="overflow-auto">
+  return <div>
     <Search/>
     <ScrollArea className="h-[calc(100vh-180px)] mt-4">
       <div className="flex flex-col gap-4">

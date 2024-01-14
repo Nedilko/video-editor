@@ -14,7 +14,7 @@ const TextInput = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn(
         "flex flex-row gap-2 items-center rounded-md border border-input h-10 w-full px-3 py-2",
-        "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1",
+        "focus-within:ring-2 focus-within:ring-ring/20 focus-within:ring-offset-0",
         "ring-offset-background",
         "text-sm ",
         "file:border-0 file:bg-transparent file:text-sm file:font-medium",
