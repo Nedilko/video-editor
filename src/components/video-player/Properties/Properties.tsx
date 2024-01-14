@@ -41,7 +41,7 @@ export const Properties = () => {
           "text-text": addLogoOn,
         }, "text-sm")}>Add Logo on</Label>
         <Select disabled={!addLogoOn}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[140px] h-8">
             <SelectValue placeholder="Top left"/>
           </SelectTrigger>
           <SelectContent>
