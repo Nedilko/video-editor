@@ -12,7 +12,7 @@ export const Properties = () => {
 
   return <div className="flex items-center">
     <Label className="text-text">Properties:</Label>
-    <div className="flex items-center gap-8 ml-4">
+    <div className="flex items-center gap-6 ml-4">
       <div className="flex gap-2 items-center">
         <Checkbox id="subtitles" checked={subtitles} onCheckedChange={value => setSubtitles(value === true)}/>
         <Label htmlFor="subtitles" className={cn({
@@ -41,7 +41,7 @@ export const Properties = () => {
           "text-text": addLogoOn,
         }, "text-sm")}>Add Logo on</Label>
         <Select disabled={!addLogoOn}>
-          <SelectTrigger className="w-[140px] h-8">
+          <SelectTrigger className="w-[140px] h-8 ">
             <SelectValue placeholder="Top left"/>
           </SelectTrigger>
           <SelectContent>

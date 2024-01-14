@@ -6,10 +6,10 @@ import { VideoView } from "@components/video-player/VideoView";
 export const Editor = () => {
   return <div className="flex flex-col flex-1 min-w-[700px] border rounded-md overflow-auto">
     <VideoView/>
-    <div className="mt-2">
+    <div className="mt-2 ml-4 mr-8">
       <Controls/>
     </div>
-    <div className="mt-2">
+    <div className="mt-2 pl-4 py-1 border-t border-b">
       <Properties/>
     </div>
     <ScrollArea id="123" className="h-[300px] mt-4">
