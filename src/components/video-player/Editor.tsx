@@ -1,11 +1,18 @@
 import { ScrollArea, ScrollBar } from "@components/ui/scroll-area";
+import { Controls } from "@components/video-player/Controls/Controls";
+import { Properties } from "@components/video-player/Properties/Properties";
+import { VideoView } from "@components/video-player/VideoView";
 
 export const Editor = () => {
-  return <div className="flex flex-col flex-1 min-w-[600px] border rounded-md">
-    <div>Video</div>
-    <div>Video Controls</div>
-    <div>Video Edit</div>
-    <ScrollArea id="123" className="h-[400px]">
+  return <div className="flex flex-col flex-1 min-w-[700px] border rounded-md overflow-auto">
+    <VideoView/>
+    <div className="mt-2">
+      <Controls/>
+    </div>
+    <div className="mt-2">
+      <Properties/>
+    </div>
+    <ScrollArea id="123" className="h-[300px] mt-4">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid aut consequuntur deleniti dicta dolor eum
       exercitationem hic, in inventore ipsa iusto labore laboriosam maiores minima necessitatibus omnis quae quaerat qui
       quibusdam quos repellendus similique, tempora velit voluptatum! Accusantium alias aliquam atque beatae blanditiis
