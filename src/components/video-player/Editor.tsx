@@ -1,7 +1,9 @@
 import { ScrollArea, ScrollBar } from "@components/ui/scroll-area";
 import { Controls } from "@components/video-player/Controls/Controls";
 import { Properties } from "@components/video-player/Properties/Properties";
+import { Timeline } from "@components/video-player/Timeline/Timeline";
 import { VideoView } from "@components/video-player/VideoView";
+import { CONTAINER_PADDING } from "@components/video-player/Timeline/constants";
 
 export const Editor = () => {
   return <div className="flex flex-col flex-1 min-w-[700px] border rounded-md overflow-auto">
@@ -12,52 +14,9 @@ export const Editor = () => {
     <div className="mt-2 pl-4 py-1 border-t border-b">
       <Properties/>
     </div>
-    <ScrollArea id="123" className="h-[300px] mt-4">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid aut consequuntur deleniti dicta dolor eum
-      exercitationem hic, in inventore ipsa iusto labore laboriosam maiores minima necessitatibus omnis quae quaerat qui
-      quibusdam quos repellendus similique, tempora velit voluptatum! Accusantium alias aliquam atque beatae blanditiis
-      cum, debitis dolore eaque error et excepturi exercitationem hic inventore iure laboriosam laudantium magni modi
-      mollitia natus nulla numquam officiis possimus repellat reprehenderit sit soluta sunt, suscipit tempora tempore,
-      velit voluptas voluptatem voluptates voluptatibus. Aliquid aperiam blanditiis delectus dignissimos dolorum earum
-      eveniet, exercitationem labore laborum libero placeat voluptate. Consequatur debitis eum labore, obcaecati
-      repellendus sequi sunt. Accusantium ad aliquam amet aperiam asperiores atque autem blanditiis commodi consequatur
-      consequuntur culpa cumque cupiditate delectus distinctio dolor doloremque doloribus dolorum ea earum eius
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid aut consequuntur deleniti dicta dolor eum
-      exercitationem hic, in inventore ipsa iusto labore laboriosam maiores minima necessitatibus omnis quae quaerat qui
-      quibusdam quos repellendus similique, tempora velit voluptatum! Accusantium alias aliquam atque beatae blanditiis
-      cum, debitis dolore eaque error et excepturi exercitationem hic inventore iure laboriosam laudantium magni modi
-      mollitia natus nulla numquam officiis possimus repellat reprehenderit sit soluta sunt, suscipit tempora tempore,
-      velit voluptas voluptatem voluptates voluptatibus. Aliquid aperiam blanditiis delectus dignissimos dolorum earum
-      eveniet, exercitationem labore laborum libero placeat voluptate. Consequatur debitis eum labore, obcaecati
-      repellendus sequi sunt. Accusantium ad aliquam amet aperiam asperiores atque autem blanditiis commodi consequatur
-      consequuntur culpa cumque cupiditate delectus distinctio dolor doloremque doloribus dolorum ea earum eius
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid aut consequuntur deleniti dicta dolor eum
-      exercitationem hic, in inventore ipsa iusto labore laboriosam maiores minima necessitatibus omnis quae quaerat qui
-      quibusdam quos repellendus similique, tempora velit voluptatum! Accusantium alias aliquam atque beatae blanditiis
-      cum, debitis dolore eaque error et excepturi exercitationem hic inventore iure laboriosam laudantium magni modi
-      mollitia natus nulla numquam officiis possimus repellat reprehenderit sit soluta sunt, suscipit tempora tempore,
-      velit voluptas voluptatem voluptates voluptatibus. Aliquid aperiam blanditiis delectus dignissimos dolorum earum
-      eveniet, exercitationem labore laborum libero placeat voluptate. Consequatur debitis eum labore, obcaecati
-      repellendus sequi sunt. Accusantium ad aliquam amet aperiam asperiores atque autem blanditiis commodi consequatur
-      consequuntur culpa cumque cupiditate delectus distinctio dolor doloremque doloribus dolorum ea earum eius
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid aut consequuntur deleniti dicta dolor eum
-      exercitationem hic, in inventore ipsa iusto labore laboriosam maiores minima necessitatibus omnis quae quaerat qui
-      quibusdam quos repellendus similique, tempora velit voluptatum! Accusantium alias aliquam atque beatae blanditiis
-      cum, debitis dolore eaque error et excepturi exercitationem hic inventore iure laboriosam laudantium magni modi
-      mollitia natus nulla numquam officiis possimus repellat reprehenderit sit soluta sunt, suscipit tempora tempore,
-      velit voluptas voluptatem voluptates voluptatibus. Aliquid aperiam blanditiis delectus dignissimos dolorum earum
-      eveniet, exercitationem labore laborum libero placeat voluptate. Consequatur debitis eum labore, obcaecati
-      repellendus sequi sunt. Accusantium ad aliquam amet aperiam asperiores atque autem blanditiis commodi consequatur
-      consequuntur culpa cumque cupiditate delectus distinctio dolor doloremque doloribus dolorum ea earum eius
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquid aut consequuntur deleniti dicta dolor eum
-      exercitationem hic, in inventore ipsa iusto labore laboriosam maiores minima necessitatibus omnis quae quaerat qui
-      quibusdam quos repellendus similique, tempora velit voluptatum! Accusantium alias aliquam atque beatae blanditiis
-      cum, debitis dolore eaque error et excepturi exercitationem hic inventore iure laboriosam laudantium magni modi
-      mollitia natus nulla numquam officiis possimus repellat reprehenderit sit soluta sunt, suscipit tempora tempore,
-      velit voluptas voluptatem voluptates voluptatibus. Aliquid aperiam blanditiis delectus dignissimos dolorum earum
-      eveniet, exercitationem labore laborum libero placeat voluptate. Consequatur debitis eum labore, obcaecati
-      repellendus sequi sunt. Accusantium ad aliquam amet aperiam asperiores atque autem blanditiis commodi consequatur
-      consequuntur culpa cumque cupiditate delectus distinctio dolor doloremque doloribus dolorum ea earum eius
+    <ScrollArea className="min-h-auto max-h-[320px] mt-4"
+                style={{ marginLeft: CONTAINER_PADDING, marginRight: CONTAINER_PADDING, paddingBottom: 10 }}>
+      <Timeline/>
       <ScrollBar orientation="vertical"/>
     </ScrollArea>
   </div>
