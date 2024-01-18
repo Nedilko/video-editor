@@ -1,4 +1,3 @@
-// import { MediaTimeline } from "@components/video-player/Timeline/MediaTimeline";
 import { MEDIA_TYPE_WIDTH } from "@components/video-player/Timeline/constants";
 import { TimeCursor } from "@components/video-player/Timeline/TimeCursor";
 import { TimelineBar } from "@components/video-player/Timeline/TimelineBar";
@@ -58,8 +57,6 @@ export const Timeline = () => {
         onChangeRange={handleChangeRange}
         onPan={handleTimeChange}
       />
-
-
       <TimeCursor time={timeCursor} duration={200} parentWidth={timelineWidth} onMove={handleTimeChange}/>
     </div>
   )
