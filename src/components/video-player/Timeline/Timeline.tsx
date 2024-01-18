@@ -5,7 +5,7 @@ import { TimelineBar } from "@components/video-player/Timeline/TimelineBar";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export const Timeline = () => {
-  const [timeCursor, setTimeCursor] = useState(0)
+  const [timeCursor, setTimeCursor] = useState(40)
   const [timelineWidth, setTimelineWidth] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -31,6 +31,11 @@ export const Timeline = () => {
     console.log(values)
   } ,[])
 
+  const handleTimeChange = useCallback((value: number) => {
+    console.log(value)
+    setTimeCursor(value)
+  } ,[])
+
   return (
     <div ref={ref} className="flex flex-col gap-3">
       {/*<MediaTimeline mediaType="video" startTime={20} time={timeCursor} endTime={60}*/}
@@ -40,12 +45,12 @@ export const Timeline = () => {
       <TimelineBar
         parentWidth={timelineWidth}
         time={timeCursor}
-        start={30}
+        start={40}
         end={150}
         duration={200}
         mediaType="video"
         onChangeRange={handleChangeRange}
-        onPan={(value) => setTimeCursor(value)}
+        onPan={handleTimeChange}
       />
       <TimelineBar
         parentWidth={timelineWidth}
@@ -55,11 +60,11 @@ export const Timeline = () => {
         duration={200}
         mediaType="audio"
         onChangeRange={handleChangeRange}
-        onPan={(value) => setTimeCursor(value)}
+        onPan={handleTimeChange}
       />
 
 
-      <TimeCursor time={timeCursor} duration={200} parentWidth={timelineWidth} onMove={(value) => setTimeCursor(value)}/>
+      <TimeCursor time={timeCursor} duration={200} parentWidth={timelineWidth} onMove={handleTimeChange}/>
     </div>
   )
 }

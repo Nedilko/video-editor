@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState, memo } from "react";
+import { DURATION_TRACK_WIDTH, MEDIA_TYPE_WIDTH } from "@components/video-player/Timeline/constants";
+import { getPositionFromTime, getTimeFromTrackPosition } from "@components/video-player/Timeline/utils";
+import { useRef, memo } from "react";
 import { createUseGesture, dragAction } from '@use-gesture/react'
 
 type Props = {
@@ -13,21 +15,14 @@ type Props = {
 }
 
 const TRACK_HEIGHT = 84
-const TRACK_WIDTH = 8
 
 export const EdgeControl = memo(function EdgeControl({ time, duration, parentWidth, onMove, constraint }: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<number>((time / duration) * parentWidth)
   const useGesture = createUseGesture([dragAction])
-
-  useEffect(() => {
-    setPosition((time / duration) * parentWidth)
-  }, [duration, parentWidth, time]);
 
   useGesture({
     onDrag: ({ offset: [x] }) => {
-      setPosition(x)
-        onMove((x / parentWidth) * duration)
+      onMove(getTimeFromTrackPosition(x, duration, parentWidth, DURATION_TRACK_WIDTH))
     }
   }, {
     target: ref,
@@ -35,10 +30,10 @@ export const EdgeControl = memo(function EdgeControl({ time, duration, parentWid
       passive: false,
     },
     drag: {
-      from: () => [(time / duration) * parentWidth, 0],
+      from: () => [getPositionFromTime(time, duration, parentWidth, DURATION_TRACK_WIDTH), 0],
       bounds: {
-        left: constraint.min * parentWidth / duration,
-        right: constraint.max * parentWidth / duration,
+        left: (constraint.min * parentWidth) / duration + MEDIA_TYPE_WIDTH - DURATION_TRACK_WIDTH / 2,
+        right: constraint.max * parentWidth / duration + MEDIA_TYPE_WIDTH - DURATION_TRACK_WIDTH / 2,
       },
     },
   });
@@ -47,8 +42,8 @@ export const EdgeControl = memo(function EdgeControl({ time, duration, parentWid
     <div ref={ref} className="absolute border border-foreground bg-primary-orange rounded touch-none"
          style={{
            height: TRACK_HEIGHT,
-           width: TRACK_WIDTH,
-           left: `${position - TRACK_WIDTH / 2}px`
+           width: DURATION_TRACK_WIDTH,
+           left: `${getPositionFromTime(time, duration, parentWidth, DURATION_TRACK_WIDTH, false)}px`
          }}
     />
   )

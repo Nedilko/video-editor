@@ -1,4 +1,5 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { getPositionFromTime } from "@components/video-player/Timeline/utils";
+import { memo, useRef } from "react";
 import { createUseGesture, dragAction } from '@use-gesture/react'
 
 type Props = {
@@ -11,28 +12,21 @@ type Props = {
 
 export const Range = memo(function Range({startTime, endTime, duration, parentWidth, handleDrag}: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  const [start, setStart] = useState((startTime / duration) * parentWidth)
-  const [end, setEnd] = useState((endTime / duration) * parentWidth)
+  const start = getPositionFromTime(startTime, duration, parentWidth, 0, false)
+  const end = getPositionFromTime(endTime, duration, parentWidth, 0, false)
   const useGesture = createUseGesture([dragAction])
-
-  useEffect(() => {
-    setStart((startTime / duration) * parentWidth)
-    setEnd((endTime / duration) * parentWidth)
-  }, [duration, endTime, parentWidth, startTime]);
 
   useGesture({
     onDrag: ({ offset: [x] }) => {
       const newStart = x
       const newEnd = x + end - start
-      setStart(newStart)
-      setEnd(newEnd)
       handleDrag([(newStart / parentWidth) * duration, (newEnd / parentWidth) * duration])
     },
   }, {
     target: ref,
     eventOptions: { passive: false },
     drag: {
-      from: () => [(startTime / duration) * parentWidth, 0],
+      from: () => [getPositionFromTime(startTime, duration, parentWidth, 0, false), 0],
       bounds: {
         left: 0,
         right: parentWidth - (endTime - startTime) / duration * parentWidth,
