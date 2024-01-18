@@ -27,7 +27,7 @@ export const Editor = () => {
       id: uuidv4(),
       start: 50,
       end: 130,
-      duration: DURATION,
+      duration: 250,
       type: MediaType.Audio,
       name: 'audio.mp4',
       url: '',
@@ -39,12 +39,11 @@ export const Editor = () => {
       id: uuidv4(),
       start: 10,
       end: 180,
-      duration: DURATION,
+      duration: 300,
       type: MediaType.Video,
       name: 'video.mp4',
       url: '',
     }])
-    console.log('add media')
   }
 
   return <div className="flex flex-col flex-1 min-w-[700px] border rounded-md overflow-auto">

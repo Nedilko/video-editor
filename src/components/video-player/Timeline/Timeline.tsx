@@ -2,7 +2,7 @@ import { MediaFileData } from "@/types";
 import { MEDIA_TYPE_WIDTH } from "@components/video-player/Timeline/constants";
 import { TimeCursor } from "@components/video-player/Timeline/TimeCursor";
 import { TimelineBar } from "@components/video-player/Timeline/TimelineBar";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   files: MediaFileData[]
@@ -12,6 +12,8 @@ export const Timeline = ({files}: Props) => {
   const [timeCursor, setTimeCursor] = useState(40)
   const [timelineWidth, setTimelineWidth] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
+
+  const maxDuration = useMemo(() => files.reduce((acc, {duration}) => Math.max(acc, duration), 0), [files])
 
   const handleResize = useCallback(() => {
     if (ref.current) {
@@ -50,12 +52,13 @@ export const Timeline = ({files}: Props) => {
           start={start}
           end={end}
           duration={duration}
+          maxDuration={maxDuration}
           mediaType={type}
           onChangeRange={handleChangeRange(id)}
           onPan={handleTimeChange}
         />
       ))}
-      <TimeCursor time={timeCursor} duration={200} parentWidth={timelineWidth} onMove={handleTimeChange}/>
+      <TimeCursor time={timeCursor} duration={maxDuration} parentWidth={timelineWidth} onMove={handleTimeChange}/>
     </div>
   )
 }

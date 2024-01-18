@@ -14,15 +14,17 @@ import { createUseGesture, wheelAction } from '@use-gesture/react'
 type Props = {
   parentWidth: number
   duration: number
+  maxDuration: number
   mediaType: MediaType
   time: number
   start: number
   end: number
   onChangeRange: (values: [number, number]) => void
   onPan: (value: number) => void
+  onRemove: () => void
 }
 
-export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end, onChangeRange, onPan }: Props) => {
+export const TimelineBar = ({ parentWidth, duration, maxDuration, mediaType, time, start, end, onChangeRange, onPan, onRemove }: Props) => {
   const ref = useRef<HTMLDivElement>(null)
   const [startTime, setStartTime] = useState(start)
   const [endTime, setEndTime] = useState(end)
@@ -32,7 +34,7 @@ export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end
 
   useGesture({
     onWheel: ({ offset: [x] }) => {
-      onPan(getTimeFromTrackPosition(x, duration, parentWidth, TIME_TRACK_WIDTH))
+      onPan(getTimeFromTrackPosition(x, maxDuration, parentWidth, TIME_TRACK_WIDTH))
     },
     onMouseDown: ({ event }) => {
       event.stopPropagation()
@@ -41,18 +43,19 @@ export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end
     onMouseUp: ({ event }) => {
       if (event.clientX === clickedX) {
         const x = event.clientX - MEDIA_TYPE_WIDTH - 32
-        onPan(getTimeFromTrackPosition(x, duration, parentWidth, TIME_TRACK_WIDTH))
+        onPan(getTimeFromTrackPosition(x, maxDuration, parentWidth, TIME_TRACK_WIDTH))
       }
     },
   }, {
     target: ref,
     eventOptions: { passive: false },
     wheel: {
-      from: () => [getPositionFromTime(time, duration, parentWidth, TIME_TRACK_WIDTH), 0],
+      from: () => [getPositionFromTime(time, maxDuration, parentWidth, TIME_TRACK_WIDTH), 0],
       bounds: {
         left: MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
         right: parentWidth + MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
       },
+      preventScroll: true,
     },
   });
 
@@ -71,16 +74,16 @@ export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end
       <Range
         startTime={startTime}
         endTime={endTime}
-        duration={duration}
+        duration={maxDuration}
         parentWidth={parentWidth}
         handleDrag={([start, end]) => {
           handleChangeStartTime(start)
           handleChangeEndTime(end)
         }}
       />
-      <EdgeControl time={startTime} duration={duration} parentWidth={parentWidth} onMove={handleChangeStartTime}
+      <EdgeControl time={startTime} duration={maxDuration} parentWidth={parentWidth} onMove={handleChangeStartTime}
                    constraint={{ min: 0, max: endTime - CONTROLS_APPROACH_MARGIN }}/>
-      <EdgeControl time={endTime} duration={duration} parentWidth={parentWidth} onMove={handleChangeEndTime}
+      <EdgeControl time={endTime} duration={maxDuration} parentWidth={parentWidth} onMove={handleChangeEndTime}
                    constraint={{ min: startTime + CONTROLS_APPROACH_MARGIN, max: duration }}/>
     </Track>
   )
