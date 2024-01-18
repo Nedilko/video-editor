@@ -8,13 +8,14 @@ import { VideoView } from "@components/video-player/VideoView";
 import { CONTAINER_PADDING } from "@components/video-player/Timeline/constants";
 import { PlusIcon } from 'lucide-react';
 import { useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 export const Editor = () => {
 
   const DURATION = 200
   const [mediaFiles, setMediaFiles] = useState<MediaFileData[]>([
     {
-      id: '1',
+      id: uuidv4(),
       start: 40,
       end: 150,
       duration: DURATION,
@@ -23,7 +24,7 @@ export const Editor = () => {
       url: '',
     },
     {
-      id: '2',
+      id: uuidv4(),
       start: 50,
       end: 130,
       duration: DURATION,
@@ -34,6 +35,15 @@ export const Editor = () => {
   ])
 
   const handleAddMedia = () => {
+    setMediaFiles((prev) => [...prev, {
+      id: uuidv4(),
+      start: 10,
+      end: 180,
+      duration: DURATION,
+      type: MediaType.Video,
+      name: 'video.mp4',
+      url: '',
+    }])
     console.log('add media')
   }
 
