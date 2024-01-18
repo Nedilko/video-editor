@@ -1,9 +1,14 @@
+import { MediaFileData } from "@/types";
 import { MEDIA_TYPE_WIDTH } from "@components/video-player/Timeline/constants";
 import { TimeCursor } from "@components/video-player/Timeline/TimeCursor";
 import { TimelineBar } from "@components/video-player/Timeline/TimelineBar";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const Timeline = () => {
+type Props = {
+  files: MediaFileData[]
+}
+
+export const Timeline = ({files}: Props) => {
   const [timeCursor, setTimeCursor] = useState(40)
   const [timelineWidth, setTimelineWidth] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
@@ -26,8 +31,8 @@ export const Timeline = () => {
     }
   }, [handleResize]);
 
-  const handleChangeRange = useCallback((values: [number, number]) => {
-    console.log(values)
+  const handleChangeRange = useCallback((id: string) => (values: [number, number]) => {
+    console.log(id, values)
   } ,[])
 
   const handleTimeChange = useCallback((value: number) => {
@@ -37,26 +42,19 @@ export const Timeline = () => {
 
   return (
     <div ref={ref} className="flex flex-col gap-3">
-      <TimelineBar
-        parentWidth={timelineWidth}
-        time={timeCursor}
-        start={40}
-        end={150}
-        duration={200}
-        mediaType="video"
-        onChangeRange={handleChangeRange}
-        onPan={handleTimeChange}
-      />
-      <TimelineBar
-        parentWidth={timelineWidth}
-        time={timeCursor}
-        start={50}
-        end={130}
-        duration={200}
-        mediaType="audio"
-        onChangeRange={handleChangeRange}
-        onPan={handleTimeChange}
-      />
+      {files.map(({id, start, end, duration, type}) => (
+        <TimelineBar
+          key={id}
+          parentWidth={timelineWidth}
+          time={timeCursor}
+          start={start}
+          end={end}
+          duration={duration}
+          mediaType={type}
+          onChangeRange={handleChangeRange(id)}
+          onPan={handleTimeChange}
+        />
+      ))}
       <TimeCursor time={timeCursor} duration={200} parentWidth={timelineWidth} onMove={handleTimeChange}/>
     </div>
   )
