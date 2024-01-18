@@ -1,5 +1,6 @@
 import { Layout } from "@components/layout/layout";
 import { ThemeProvider } from "@components/theme/theme-provider";
+import { Toaster } from "@components/toast/toast-provider";
 import { Sidebar } from "@components/transcript/Sidebar";
 import { Editor } from "@components/video-player/Editor";
 
@@ -11,6 +12,7 @@ function App() {
         <Sidebar/>
       </div>
     </Layout>
+    <Toaster/>
   </ThemeProvider>
 }
 

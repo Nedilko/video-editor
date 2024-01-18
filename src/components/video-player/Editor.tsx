@@ -54,8 +54,10 @@ export const Editor = () => {
     <div className="mt-2 pl-4 py-1 border-t border-b">
       <Properties/>
     </div>
-    <ScrollArea className="min-h-auto max-h-[320px] mt-4"
-                style={{ marginLeft: CONTAINER_PADDING, marginRight: CONTAINER_PADDING, paddingBottom: 10 }}>
+    <ScrollArea
+      className="min-h-auto max-h-[320px] mt-4"
+      style={{ marginLeft: CONTAINER_PADDING, marginRight: CONTAINER_PADDING, paddingBottom: 10 }}
+    >
       <Timeline files={mediaFiles} />
       <ScrollBar orientation="vertical"/>
     </ScrollArea>

@@ -3,6 +3,7 @@ import { MEDIA_TYPE_WIDTH } from "@components/video-player/Timeline/constants";
 import { TimeCursor } from "@components/video-player/Timeline/TimeCursor";
 import { TimelineBar } from "@components/video-player/Timeline/TimelineBar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner"
 
 type Props = {
   files: MediaFileData[]
@@ -42,11 +43,24 @@ export const Timeline = ({files}: Props) => {
     setTimeCursor(value)
   } ,[])
 
+  const handleRemove = useCallback((id: string, name: string) => () => {
+    console.log(id)
+    toast.error(`File ${name} removed`, {
+      duration: 30000,
+      action: {
+        label: 'close',
+        onClick: () => {}
+      }
+    })
+  } ,[])
+
   return (
     <div ref={ref} className="flex flex-col gap-3">
-      {files.map(({id, start, end, duration, type}) => (
+      {files.map(({id, name, url, start, end, duration, type}) => (
         <TimelineBar
           key={id}
+          name={name}
+          url={url}
           parentWidth={timelineWidth}
           time={timeCursor}
           start={start}
@@ -56,6 +70,7 @@ export const Timeline = ({files}: Props) => {
           mediaType={type}
           onChangeRange={handleChangeRange(id)}
           onPan={handleTimeChange}
+          onRemove={handleRemove(id, name)}
         />
       ))}
       <TimeCursor time={timeCursor} duration={maxDuration} parentWidth={timelineWidth} onMove={handleTimeChange}/>
