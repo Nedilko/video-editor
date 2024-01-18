@@ -10,7 +10,7 @@ type Props = {
   handleDrag: (value: [number, number]) => void;
 }
 
-export const Range = memo(function Range({startTime, endTime, duration, parentWidth, handleDrag}: Props) {
+export const Range = memo(function Range({ startTime, endTime, duration, parentWidth, handleDrag }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const start = getPositionFromTime(startTime, duration, parentWidth, 0, false)
   const end = getPositionFromTime(endTime, duration, parentWidth, 0, false)
@@ -21,7 +21,7 @@ export const Range = memo(function Range({startTime, endTime, duration, parentWi
       const newStart = x
       const newEnd = x + end - start
       handleDrag([(newStart / parentWidth) * duration, (newEnd / parentWidth) * duration])
-    },
+    }
   }, {
     target: ref,
     eventOptions: { passive: false },
@@ -37,5 +37,5 @@ export const Range = memo(function Range({startTime, endTime, duration, parentWi
   return <div ref={ref} className="absolute bg-primary/20 h-[84px] touch-none" style={{
     left: `${start}px`,
     width: `${end - start}px`
-  }} />;
+  }}/>;
 });

@@ -1,5 +1,9 @@
 import { MediaType } from "@/types";
-import { CONTROLS_APPROACH_MARGIN, MEDIA_TYPE_WIDTH, TIME_TRACK_WIDTH } from "@components/video-player/Timeline/constants";
+import {
+  CONTROLS_APPROACH_MARGIN,
+  MEDIA_TYPE_WIDTH,
+  TIME_TRACK_WIDTH
+} from "@components/video-player/Timeline/constants";
 import { EdgeControl } from "@components/video-player/Timeline/EdgeControl";
 import { Range } from "@components/video-player/Timeline/Range";
 import { Track } from "@components/video-player/Timeline/Track";
@@ -27,8 +31,7 @@ export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end
   const [clickedX, setClickedX] = useState(0)
 
   useGesture({
-    onWheel: ({ offset: [x], delta: [deltaX] }) => {
-      console.log(deltaX)
+    onWheel: ({ offset: [x] }) => {
       onPan(getTimeFromTrackPosition(x, duration, parentWidth, TIME_TRACK_WIDTH))
     },
     onMouseDown: ({ event }) => {
@@ -40,7 +43,7 @@ export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end
         const x = event.clientX - MEDIA_TYPE_WIDTH - 32
         onPan(getTimeFromTrackPosition(x, duration, parentWidth, TIME_TRACK_WIDTH))
       }
-    }
+    },
   }, {
     target: ref,
     eventOptions: { passive: false },
@@ -51,7 +54,6 @@ export const TimelineBar = ({ parentWidth, duration, mediaType, time, start, end
         right: parentWidth + MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
       },
     },
-
   });
 
   const handleChangeStartTime = useCallback((value: number) => {

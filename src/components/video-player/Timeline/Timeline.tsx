@@ -38,10 +38,6 @@ export const Timeline = () => {
 
   return (
     <div ref={ref} className="flex flex-col gap-3">
-      {/*<MediaTimeline mediaType="video" startTime={20} time={timeCursor} endTime={60}*/}
-      {/*               onChange={([, center]) => setTimeCursor(center)}/>*/}
-      {/*<MediaTimeline mediaType="audio" startTime={25} time={timeCursor} endTime={55}*/}
-      {/*               onChange={([, center]) => setTimeCursor(center)}/>*/}
       <TimelineBar
         parentWidth={timelineWidth}
         time={timeCursor}
