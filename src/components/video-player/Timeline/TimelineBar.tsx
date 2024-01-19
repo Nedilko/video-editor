@@ -1,12 +1,12 @@
 import { MediaType } from "@/types";
-import { ConfirmRemoveDialog } from "@components/video-player/Timeline/ConfirmRemoveDialog";
+import { ConfirmRemoveDialog } from "@components/Dialogs/ConfirmRemoveDialog";
 import {
   CONTROLS_APPROACH_MARGIN,
   MEDIA_TYPE_WIDTH,
   TIME_TRACK_WIDTH
 } from "@components/video-player/Timeline/constants";
 import { EdgeControl } from "@components/video-player/Timeline/EdgeControl";
-import { InfoDialog } from "@components/video-player/Timeline/InfoDialog";
+import { InfoDialog } from "@components/Dialogs/InfoDialog";
 import { Range } from "@components/video-player/Timeline/Range";
 import { TimelineBarContextMenu } from "@components/video-player/Timeline/TimelineBarContextMenu";
 import { Track } from "@components/video-player/Timeline/Track";

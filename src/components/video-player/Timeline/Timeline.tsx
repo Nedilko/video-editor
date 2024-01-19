@@ -7,56 +7,59 @@ import { toast } from "sonner"
 
 type Props = {
   files: MediaFileData[]
+  onRemoveFile: (id: string) => void
 }
 
-export const Timeline = ({files}: Props) => {
+export const Timeline = ({ files, onRemoveFile }: Props) => {
   const [timeCursor, setTimeCursor] = useState(40)
   const [timelineWidth, setTimelineWidth] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
 
-  const maxDuration = useMemo(() => files.reduce((acc, {duration}) => Math.max(acc, duration), 0), [files])
+  const maxDuration = useMemo(() => files.reduce((acc, { duration }) => Math.max(acc, duration), 0), [files])
 
-  const handleResize = useCallback(() => {
-    if (ref.current) {
-      const { width } = ref.current.getBoundingClientRect()
-      setTimelineWidth(width - MEDIA_TYPE_WIDTH)
-    }
-  }, [ref])
+  const obs = useMemo(() => new ResizeObserver(() => {
+    if (!ref.current) return;
+    setTimelineWidth(ref.current.clientWidth - MEDIA_TYPE_WIDTH)
 
-  useEffect(() => {
-    handleResize()
-  }, [handleResize])
+  }), [ref])
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [handleResize]);
+    if (!ref.current) return;
+    obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [obs]);
 
   const handleChangeRange = useCallback((id: string) => (values: [number, number]) => {
     console.log(id, values)
-  } ,[])
+  }, [])
 
   const handleTimeChange = useCallback((value: number) => {
     console.log(value)
     setTimeCursor(value)
-  } ,[])
+  }, [])
 
   const handleRemove = useCallback((id: string, name: string) => () => {
-    console.log(id)
+    onRemoveFile(id)
     toast.error(`File ${name} removed`, {
-      duration: 30000,
+      duration: 300000,
       action: {
         label: 'close',
-        onClick: () => {}
-      }
+        onClick: () => {
+        }
+      },
     })
-  } ,[])
+  }, [onRemoveFile])
+
+  if (!files.length) {
+    return <div className="flex flex-col items-center justify-center h-full">
+      <div data-abc={true} className="text-muted-foreground">No files</div>
+      <div className="text-muted-foreground">Add some files to start editing</div>
+    </div>
+  }
 
   return (
     <div ref={ref} className="flex flex-col gap-3">
-      {files.map(({id, name, url, start, end, duration, type}) => (
+      {files.map(({ id, name, url, start, end, duration, type }) => (
         <TimelineBar
           key={id}
           name={name}
