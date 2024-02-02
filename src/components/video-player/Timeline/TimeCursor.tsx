@@ -1,22 +1,29 @@
-import { MEDIA_TYPE_WIDTH, TIME_TRACK_WIDTH } from "@components/video-player/Timeline/constants";
+import { TIME_TRACK_WIDTH } from "@components/video-player/Timeline/constants";
 import { getPositionFromTime, getTimeFromTrackPosition } from "@components/video-player/Timeline/utils";
 import { memo, useRef } from "react";
-import { createUseGesture, dragAction } from '@use-gesture/react'
+import { createUseGesture, dragAction, wheelAction } from '@use-gesture/react'
 
 type Props = {
   time: number
+  start: number
+  end: number
   duration: number
   parentWidth: number
   onMove: (time: number) => void
 }
 
-export const TimeCursor = memo((({ time, duration, parentWidth, onMove }: Props) => {
+export const TimeCursor = memo((({ time, start, end, duration, parentWidth, onMove }: Props) => {
   const ref = useRef<HTMLDivElement>(null)
-  const useGesture = createUseGesture([dragAction])
+  const useGesture = createUseGesture([dragAction, wheelAction])
 
   useGesture({
     onDrag: ({ offset: [x] }) => {
       onMove(getTimeFromTrackPosition(x, duration, parentWidth, TIME_TRACK_WIDTH))
+    },
+    onWheel: ({ offset: [x], direction: [directionX] }) => {
+      if (directionX) {
+        onMove(getTimeFromTrackPosition(x, duration, parentWidth, TIME_TRACK_WIDTH))
+      }
     }
   }, {
     target: ref,
@@ -24,10 +31,18 @@ export const TimeCursor = memo((({ time, duration, parentWidth, onMove }: Props)
     drag: {
       from: () => [getPositionFromTime(time, duration, parentWidth, TIME_TRACK_WIDTH), 0],
       bounds: {
-        left: MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
-        right: parentWidth + MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
+        left: getPositionFromTime(start, duration, parentWidth, TIME_TRACK_WIDTH),
+        right: getPositionFromTime(end, duration, parentWidth, TIME_TRACK_WIDTH),
       },
     },
+    wheel: {
+      from: () => [getPositionFromTime(time, duration, parentWidth, TIME_TRACK_WIDTH), 0],
+      bounds: {
+        left: getPositionFromTime(start, duration, parentWidth, TIME_TRACK_WIDTH),
+        right: getPositionFromTime(end, duration, parentWidth, TIME_TRACK_WIDTH),
+      },
+    }
+
   });
 
   return (

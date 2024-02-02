@@ -8,6 +8,7 @@ type Props = {
   duration: number
   parentWidth: number
   onMove: (time: number) => void
+  onMoveEnd: (time: number) => void
   constraint: {
     min: number
     max: number
@@ -16,14 +17,17 @@ type Props = {
 
 const TRACK_HEIGHT = 84
 
-export const EdgeControl = memo(function EdgeControl({ time, duration, parentWidth, onMove, constraint }: Props) {
+export const EdgeControl = memo(function EdgeControl({ time, duration, parentWidth, onMove, onMoveEnd, constraint }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const useGesture = createUseGesture([dragAction])
 
   useGesture({
     onDrag: ({ offset: [x] }) => {
       onMove(getTimeFromTrackPosition(x, duration, parentWidth, DURATION_TRACK_WIDTH))
-    }
+    },
+    onDragEnd: ({ offset: [x] }) => {
+      onMoveEnd(getTimeFromTrackPosition(x, duration, parentWidth, DURATION_TRACK_WIDTH))
+    },
   }, {
     target: ref,
     eventOptions: {

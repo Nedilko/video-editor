@@ -11,6 +11,16 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/components/'),
       '@utils': path.resolve(__dirname, './src/utils/'),
       '@hooks': path.resolve(__dirname, './src/hooks/'),
+      '@store': path.resolve(__dirname, './src/store/'),
     },
+  },
+  optimizeDeps: {
+    exclude: ["@ffmpeg/ffmpeg" , "@ffmpeg/core"],
+  },
+  server: {
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "credentialless",
+    }
   }
 })

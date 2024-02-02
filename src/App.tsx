@@ -1,36 +1,28 @@
+import { VideoLoadModal } from "@components/Dialogs/VideoLoadModal";
 import { Layout } from "@components/layout/layout";
+import { MainView } from "@components/MainView";
 import { ThemeProvider } from "@components/theme/theme-provider";
 import { Toaster } from "@components/toast/toast-provider";
-import { Sidebar } from "@components/transcript/Sidebar";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@components/ui/resizable";
-import { Editor } from "@components/video-player/Editor";
+import { VideoProvider } from "@components/video-player/video-provider";
 import { useDisclosure } from "@hooks/useDisclosure";
+import { store } from "@store/store";
+import { Provider as StoreProvider } from 'react-redux';
 
 function App() {
-  const [isSidebarOpened, { open: openSidebar, close: closeSidebar }] = useDisclosure(true)
+  const [isLoadingVideoModalOpened, { close: closeLoadingVideoModal }] = useDisclosure(true)
+
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Layout>
-        <ResizablePanelGroup
-          direction="horizontal"
-          autoSaveId="panels-position"
-          className="flex gap-2"
-        >
-          <ResizablePanel order={1} id="editor" defaultSize={80} className="border rounded-md">
-            <Editor isSidebarOpened={isSidebarOpened} onOpenSidebar={openSidebar}/>
-          </ResizablePanel>
-          {isSidebarOpened && (
-            <>
-              <ResizableHandle withHandle/>
-              <ResizablePanel order={2} id="sidebar" defaultSize={20} className="border rounded-md" minSize={20} maxSize={40}>
-                <Sidebar onClose={closeSidebar}/>
-              </ResizablePanel>
-            </>
-          )}
-        </ResizablePanelGroup>
-      </Layout>
-      <Toaster/>
-    </ThemeProvider>
+    <StoreProvider store={store}>
+      <VideoProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <Layout>
+            <MainView />
+            <VideoLoadModal open={isLoadingVideoModalOpened} onClose={closeLoadingVideoModal}/>
+          </Layout>
+          <Toaster/>
+        </ThemeProvider>
+      </VideoProvider>
+    </StoreProvider>
   )
 }
 
