@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import { SidebarOpenIcon } from 'lucide-react'
 
 type Props = {
-  // isOpen: boolean
   onClose: () => void
 }
 
@@ -20,7 +19,7 @@ export const Sidebar = ({ onClose }: Props) => {
       <TabsTrigger value="transcript">Transcript</TabsTrigger>
       <TabsTrigger value="summary">Summary</TabsTrigger>
     </TabsList>
-    <TabsContent value="transcript" className="m-2">
+    <TabsContent value="transcript" className="m-2 !ring-0">
       <Transcript/>
     </TabsContent>
     <TabsContent value="summary" className="m-2">

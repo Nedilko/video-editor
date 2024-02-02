@@ -82,16 +82,3 @@ export const ExportDialog = ({ open, onClose, onSuccess, onError }: Props) => {
     </Dialog>
   )
 }
-
-// async function getNewFileHandle() {
-//   const opts = {
-//     types: [
-//       {
-//         description: "Text file",
-//         accept: { "text/plain": [".txt"] },
-//       },
-//     ],
-//   };
-//   return await window.showSaveFilePicker(opts);
-// }
-

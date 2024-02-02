@@ -6,16 +6,20 @@ import {
   TIME_TRACK_WIDTH
 } from "@components/video-player/Timeline/constants";
 import { EdgeControl } from "@components/video-player/Timeline/EdgeControl";
-import { InfoDialog } from "@components/Dialogs/InfoDialog";
+import { TimelineInfoDialog } from "@components/Dialogs/TimelineInfoDialog";
 import { Range } from "@components/video-player/Timeline/Range";
 import { TimelineBarContextMenu } from "@components/video-player/Timeline/TimelineBarContextMenu";
 import { Track } from "@components/video-player/Timeline/Track";
 import { getPositionFromTime, getTimeFromTrackPosition } from "@components/video-player/Timeline/utils";
+import { useAppDispatch } from "@hooks/store";
 import { useDisclosure } from "@hooks/useDisclosure";
+import { setIsSeeking } from "@store/playback-slice";
+import { selectTimeline } from "@store/timeline-slice";
 import { useCallback, useRef, useState } from "react";
 import { createUseGesture, wheelAction } from '@use-gesture/react'
 
 type Props = {
+  id: string
   name: string
   url: string
   parentWidth: number
@@ -26,11 +30,14 @@ type Props = {
   start: number
   end: number
   onChangeRange: (values: [number, number]) => void
+  onChangeRangeEnded: (values: [number, number]) => void
   onPan: (value: number) => void
   onRemove: () => void
+  selected: boolean
 }
 
 export const TimelineBar = ({
+                              id,
                               name,
                               url,
                               parentWidth,
@@ -41,8 +48,10 @@ export const TimelineBar = ({
                               start,
                               end,
                               onChangeRange,
+                              onChangeRangeEnded,
                               onPan,
-                              onRemove
+                              onRemove,
+                              selected
                             }: Props) => {
   const ref = useRef<HTMLDivElement>(null)
   const [startTime, setStartTime] = useState(start)
@@ -50,6 +59,7 @@ export const TimelineBar = ({
   const useGesture = createUseGesture([wheelAction])
   const [isInfoModalOpened, { open: openInfoDialog, close: closeInfoDialog }] = useDisclosure()
   const [confirmRemoveDialog, { open: openConfirmRemoveDialog, close: closeConfirmRemoveDialog }] = useDisclosure()
+  const dispatch = useAppDispatch()
 
   const [clickedX, setClickedX] = useState(0)
 
@@ -59,6 +69,12 @@ export const TimelineBar = ({
         onPan(getTimeFromTrackPosition(x, maxDuration, parentWidth, TIME_TRACK_WIDTH))
       }
     },
+    onWheelStart: () => {
+      dispatch(setIsSeeking(true))
+    },
+    onWheelEnd: () => {
+      dispatch(setIsSeeking(false))
+    },
     onMouseDown: ({ event }) => {
       event.stopPropagation()
       setClickedX(event.clientX)
@@ -66,17 +82,30 @@ export const TimelineBar = ({
     onMouseUp: ({ event }) => {
       if (event.clientX === clickedX) {
         const x = event.clientX - MEDIA_TYPE_WIDTH - 32
-        onPan(getTimeFromTrackPosition(x, maxDuration, parentWidth, TIME_TRACK_WIDTH))
+        const newTime = getTimeFromTrackPosition(x, maxDuration, parentWidth, TIME_TRACK_WIDTH)
+
+        if (newTime > end) {
+          onPan(end)
+        } else if (newTime < start) {
+          onPan(start)
+        } else {
+          onPan(newTime)
+        }
+
+        dispatch(selectTimeline(id))
       }
     },
+    onClick: ({ event }) => {
+      event.stopPropagation()
+    }
   }, {
     target: ref,
     eventOptions: { passive: false },
     wheel: {
       from: () => [getPositionFromTime(time, maxDuration, parentWidth, TIME_TRACK_WIDTH), 0],
       bounds: {
-        left: MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
-        right: parentWidth + MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2,
+        left: getPositionFromTime(start, maxDuration, parentWidth, TIME_TRACK_WIDTH),
+        right: getPositionFromTime(end, maxDuration, parentWidth, TIME_TRACK_WIDTH),
       },
       preventScroll: true,
     },
@@ -87,14 +116,22 @@ export const TimelineBar = ({
     onChangeRange([value, endTime])
   }, [endTime, onChangeRange])
 
+  const handleChangeStartTimeEnded = useCallback((value: number) => {
+    onChangeRangeEnded([value, endTime])
+  }, [endTime, onChangeRangeEnded])
+
   const handleChangeEndTime = useCallback((value: number) => {
     setEndTime(value)
     onChangeRange([startTime, value])
   }, [onChangeRange, startTime])
 
+  const handleChangeEndTimeEnded = useCallback((value: number) => {
+    onChangeRangeEnded([startTime, value])
+  }, [onChangeRangeEnded, startTime])
+
   return (
     <TimelineBarContextMenu onRemove={openConfirmRemoveDialog} onInfo={openInfoDialog}>
-      <Track ref={ref} mediaType={mediaType}>
+      <Track ref={ref} mediaType={mediaType} selected={selected}>
         <Range
           startTime={startTime}
           endTime={endTime}
@@ -104,14 +141,32 @@ export const TimelineBar = ({
             handleChangeStartTime(start)
             handleChangeEndTime(end)
           }}
+          handleDragEnd={([start, end]) => {
+            handleChangeStartTimeEnded(start)
+            handleChangeEndTimeEnded(end)
+          }}
         />
-        <EdgeControl time={startTime} duration={maxDuration} parentWidth={parentWidth} onMove={handleChangeStartTime}
-                     constraint={{ min: 0, max: endTime - CONTROLS_APPROACH_MARGIN }}/>
-        <EdgeControl time={endTime} duration={maxDuration} parentWidth={parentWidth} onMove={handleChangeEndTime}
-                     constraint={{ min: startTime + CONTROLS_APPROACH_MARGIN, max: duration }}/>
+        <EdgeControl
+          time={startTime}
+          duration={maxDuration}
+          parentWidth={parentWidth}
+          onMove={handleChangeStartTime}
+          onMoveEnd={handleChangeStartTimeEnded}
+          constraint={{ min: 0, max: endTime - CONTROLS_APPROACH_MARGIN }}
+        />
+        <EdgeControl
+          time={endTime}
+          duration={maxDuration}
+          parentWidth={parentWidth}
+          onMove={handleChangeEndTime}
+          onMoveEnd={handleChangeEndTimeEnded}
+          constraint={{ min: startTime + CONTROLS_APPROACH_MARGIN, max: duration }}
+        />
       </Track>
-      <InfoDialog open={isInfoModalOpened} onClose={closeInfoDialog} duration={duration} type={mediaType} name={name} url={url}
-                  start={start} end={end}/>
+      <TimelineInfoDialog open={isInfoModalOpened} onClose={closeInfoDialog} duration={duration} type={mediaType}
+                          name={name}
+                          url={url}
+                          start={start} end={end}/>
       <ConfirmRemoveDialog open={confirmRemoveDialog} onClose={closeConfirmRemoveDialog} onConfirm={onRemove}/>
     </TimelineBarContextMenu>
   )
