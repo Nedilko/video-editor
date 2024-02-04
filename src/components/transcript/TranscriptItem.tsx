@@ -3,7 +3,7 @@ import { TranscriptContextMenu } from "@components/transcript/TranscriptContextM
 import { TranscriptText } from "@components/transcript/TranscriptText";
 import { useAppDispatch, useAppSelector } from "@hooks/store";
 import { useDisclosure } from "@hooks/useDisclosure";
-import { setTime } from "@store/playback-slice";
+import { setTimeAndPause } from "@store/playback-slice";
 import { getAllTimelines, toggleMuteSubtitle } from "@store/timeline-slice";
 import { getFormattedTime } from "@utils/time";
 import { cn } from "@utils/ui";
@@ -40,7 +40,7 @@ export const TranscriptItem = forwardRef<HTMLDivElement, Props>(({
   const [isInfoModalOpened, { open: openInfoDialog, close: closeInfoDialog }] = useDisclosure()
 
   const handleClick = () => {
-    dispatch(setTime(start))
+    dispatch(setTimeAndPause(start))
   }
 
   const handleMute = async () => {
@@ -49,8 +49,12 @@ export const TranscriptItem = forwardRef<HTMLDivElement, Props>(({
     }
   }
 
+  const handleSeekTo = () => {
+    dispatch(setTimeAndPause(start))
+  }
+
   return (
-    <TranscriptContextMenu onMute={handleMute} onInfo={openInfoDialog}>
+    <TranscriptContextMenu onMute={handleMute} onInfo={openInfoDialog} onSeekTo={handleSeekTo}>
       <div ref={ref}
            className={cn("flex flex-col gap-2 transition-all cursor-pointer hover:bg-muted py-1 px-2", {
              "border-l border-l-red-500 rounded-tr rounded-br": active,
