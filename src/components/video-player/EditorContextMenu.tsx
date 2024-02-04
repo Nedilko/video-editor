@@ -23,16 +23,10 @@ export const EditorContextMenu = ({ children }: PropsWithChildren) => {
   const disabled = !useAppSelector(getHasMedia)
   const timelines = useAppSelector(getAllTimelines)
 
-  if (disabled) {
-    return <>
-      {children}
-    </>
-  }
-
   const handleTogglePlayPause = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
     dispatch(togglePlayPause())
-  } , [])
+  } , [dispatch])
 
   const handleRemove = (e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
@@ -54,6 +48,12 @@ export const EditorContextMenu = ({ children }: PropsWithChildren) => {
         }
       },
     })
+  }
+
+  if (disabled) {
+    return <>
+      {children}
+    </>
   }
 
   return (
