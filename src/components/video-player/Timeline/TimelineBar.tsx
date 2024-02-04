@@ -81,7 +81,7 @@ export const TimelineBar = ({
     },
     onMouseUp: ({ event }) => {
       if (event.clientX === clickedX) {
-        const x = event.clientX - MEDIA_TYPE_WIDTH - 32
+        const x = event.offsetX + MEDIA_TYPE_WIDTH - TIME_TRACK_WIDTH / 2
         const newTime = getTimeFromTrackPosition(x, maxDuration, parentWidth, TIME_TRACK_WIDTH)
 
         if (newTime > end) {
