@@ -67,3 +67,8 @@ It includes the following features:
 - Navigating video to appropriate subtitle item
 - Muting video when appropriate substitles item is reached during playback (via context menu item)
 - Auto navigating to the next subtitle item when playback reached appropriate timestamp
+
+# Examples of video and subtitles
+All examples can be downloaded from the following links:
+- [video.mp4](http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4)
+- [subtitles.srt](https://download.blender.org/demo/movies/ToS/subtitles/TOS-en.srt)
