@@ -12,7 +12,7 @@ import { getIsPaused, goToStart, pause, setEnd, setStart, setVideoSrc, togglePla
 import { showSubtitles, toggleSubtitles } from "@store/properties-slice";
 import { deselectTimeline, getAllTimelines, getHasMedia, removeTimeline } from "@store/timeline-slice";
 import { cn } from "@utils/ui";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useCallback } from "react";
 import { Play, Pause } from 'lucide-react'
 import { toast } from "sonner";
 
@@ -28,6 +28,11 @@ export const EditorContextMenu = ({ children }: PropsWithChildren) => {
       {children}
     </>
   }
+
+  const handleTogglePlayPause = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation()
+    dispatch(togglePlayPause())
+  } , [])
 
   const handleRemove = (e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
@@ -57,10 +62,7 @@ export const EditorContextMenu = ({ children }: PropsWithChildren) => {
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem className="text-muted-foreground" onClick={e => {
-          e.stopPropagation()
-          dispatch(togglePlayPause())
-        }}>
+        <ContextMenuItem className="text-muted-foreground" onClick={handleTogglePlayPause}>
           {isPaused ? (
             <div className="flex gap-2 items-center">
               <Pause size={16}/>
@@ -73,10 +75,7 @@ export const EditorContextMenu = ({ children }: PropsWithChildren) => {
             </div>
           )}
         </ContextMenuItem>
-        <ContextMenuItem className="text-muted-foreground" onClick={e => {
-          e.stopPropagation()
-          dispatch(toggleSubtitles())
-        }}>
+        <ContextMenuItem className="text-muted-foreground" onClick={e => e.stopPropagation()}>
           <div className="flex gap-2 items-center">
             <Checkbox id="subtitles" checked={hasSubtitles}
                       onCheckedChange={() => dispatch(toggleSubtitles())}/>
