@@ -8,7 +8,7 @@ type Props = {
   onClose: () => void;
 }
 export const VideoLoadModal = ({ open, onClose }: Props) => {
-  const { loaded } = useVideo()
+  const { loaded,  } = useVideo()
   const handleClose = (isOpen: boolean) => {
     if (!isOpen) {
       onClose();
@@ -29,6 +29,7 @@ export const VideoLoadModal = ({ open, onClose }: Props) => {
         />
         <div className="fixed left-0 top-0 bottom-0 right-0 z-50 flex justify-center items-center w-full">
           <Loader size={32} className="animate-spin-slow"/>
+          <div className="text-white text-2xl ml-4">Loading application...</div>
         </div>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

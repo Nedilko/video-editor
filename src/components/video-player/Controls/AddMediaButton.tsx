@@ -11,7 +11,7 @@ export const AddMediaButton = () => {
 
   return (
     <>
-      <Button variant="outline" className="mt-2 flex gap-2 rounded-full h-8" onClick={openNewTimelineModal} disabled={timelines.length > 1}>
+      <Button variant="outline" className="mt-2 flex gap-2 rounded-full h-8" onClick={openNewTimelineModal} disabled={timelines.length > 0}>
         <PlusIcon size={16}/>
         <span>Add Media</span>
       </Button>
